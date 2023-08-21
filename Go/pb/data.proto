@@ -1,0 +1,1286 @@
+syntax = "proto3";
+
+option go_package = "./pb;pb"; // 生成路径;生成go文件的包名
+
+enum ActionType {
+  Login = 0; // 登入
+  Logout = 1; // 登出
+  Heartbeat = 2; // 心跳
+}
+
+enum ResponseType {
+  Success = 0;
+  Failure = 1;
+}
+enum SecurityTradingStatus {
+  SecurityTradingStatus_Trading_Halt = 0;
+  SecurityTradingStatus_Resume = 1;
+}
+
+enum SuspensionIndicator {
+  SuspensionIndicator_Trading_Halt_OF_Suspend = 0;
+  SuspensionIndicator_Resume = 1;
+}
+
+enum Authenticity {
+  Authenticity_LIVE_PRODUCTION = 0;
+  Authenticity_TEST = 1;
+}
+
+enum BreachedLevel {
+  BreachedLevel_LEVEL1 = 0;
+  BreachedLevel_LEVEL2 = 1;
+  BreachedLevel_LEVEL3 = 2;
+}
+
+enum CurrentTradingState {
+  CurrentTradingState_HALT_IN_EFFECT = 0;
+  CurrentTradingState_PAUSED_ACROSS_ALL = 1;
+  CurrentTradingState_QUOTE_ONLY_PERIOD_IN_EFFECT = 2;
+  CurrentTradingState_TRADING_ON_NASDAQ_MARKET = 3;
+}
+
+enum EventCode {
+  EventCode_START_OF_TRANSMISSIONS = 0;
+  EventCode_START_OF_SYSTEM_HOURS = 1;
+  EventCode_START_OF_MARKET_HOURS = 2;
+  EventCode_END_OF_THE_REGULAR_US_SESSION = 3;
+  EventCode_END_OF_SYSTEM_HOURS = 4;
+  EventCode_END_OF_TRANSMISSIONS = 5;
+}
+
+enum FinancialStatusIndicator {
+  FinancialStatusIndicator_DEFICIENT = 0;
+  FinancialStatusIndicator_DELINQUENT = 1;
+  FinancialStatusIndicator_BANKRUPT = 2;
+  FinancialStatusIndicator_SUSPENDED = 3;
+  FinancialStatusIndicator_DEFICIENT_AND_BANKRUPT = 4;
+  FinancialStatusIndicator_DEFICIENT_AND_DELINQUENT = 5;
+  FinancialStatusIndicator_DELINQUENT_AND_BANKRUPT = 6;
+  FinancialStatusIndicator_DEFICIENT_DELINQUENT_AND_BANKRUPT = 7;
+  FinancialStatusIndicator_REDEMPTIONS_SUSPENDED_FOR_EXCHANGE_TRADED_PRODUCT = 8;
+  FinancialStatusIndicator_ISSUER_IS_NOT_DEFICIENT = 9;
+}
+
+enum HaltAction {
+  HaltAction_OPERATIONALLY_HALTED_ON_THE_IDENTIFIED_MARKET = 0;
+  HaltAction_OPERATIONAL_HALT_HAS_BEEN_LIFTED_AND_TRADING_RESUMED = 1;
+}
+
+enum IPOQuotationReleaseQualifier {
+  IPOQuotationReleaseQualifier_ANTICIPATED_QUOTATION_RELEASE_TIME = 0;
+  IPOQuotationReleaseQualifier_IPO_RELEASE_CANCELED_POSTPONED = 1;
+}
+
+enum IndicatesIf {
+  IndicatesIf_Y = 0;
+  IndicatesIf_N = 1;
+}
+
+enum LULDRule {
+  LULDRule_NMS_STOCKS_AND_SELECT_ETPS = 0;
+  LULDRule_NMS_STOCKS = 1;
+}
+
+enum LevelFour {
+  LevelFour_ACQUISITION = 0;
+  LevelFour_BUNCHED = 1;
+  LevelFour_DISTRIBUTION = 2;
+  LevelFour_PRICE_VARIATION_TRANSACTION = 3;
+  LevelFour_NASDAQ_OFFICIAL_CLOSE_PRICE = 4;
+  LevelFour_PRIOR_REFERENCE_PRICE = 5;
+  LevelFour_NASDAQ_OFFICIAL_OPENING_PRICE = 6;
+  LevelFour_SPLIT_TRADE = 7;
+  LevelFour_CONTINGENT_TRADE = 8;
+  LevelFour_AVERAGE_PRICE_TRADE1 = 9;
+  LevelFour_CROSS_TRADE = 10;
+  LevelFour_ODD_LOT_EXECUTION = 11;
+  LevelFour_ODD_LOT_CROSS_EXECUTION = 12;
+}
+
+enum LevelOne {
+  LevelOne_REGULAR = 0;
+  LevelOne_CASH_SETTLEMENT = 1;
+  LevelOne_NEXT_DAY_SETTLEMENT = 2;
+  LevelOne_SELLER_SETTLEMENT = 3;
+}
+
+enum LevelThree {
+  LevelThree_EXTENDED_HOURS_TRADE = 0;
+  LevelThree_SOLD_LAST_REPORTED_LATE_BUT_IN_SEQUENCE = 1;
+  LevelThree_SOLD_OUT_OF_SEQUENCE = 2;
+  LevelThree_EXTENDED_HOURS_TRADE_REPORTED_LATE_OR_OUT_OF_SEQUENCE = 3;
+}
+
+enum LevelTwo {
+  LevelTwo_INTERMARKET_SWEEP = 0;
+  LevelTwo_OPENING_PRINT = 1;
+  LevelTwo_DERIVATIVE_PRICED = 2;
+  LevelTwo_RE_OPENING_PRINT = 3;
+  LevelTwo_CLOSING_PRINT = 4;
+  LevelTwo_QUALIFIED_CONTINGENT_TRADE = 5;
+}
+
+enum MarketCategory {
+  MarketCategory_NASDAQ_GLOBAL_SELECT_MARKETSM = 0;
+  MarketCategory_NASDAQ_GLOBAL_MARKETSM = 1;
+  MarketCategory_NASDAQ_CAPITAL_MARKET_NON_NASDAQ_LISTED_INSTRUMENTS = 2;
+  MarketCategory_NEW_YORK_STOCK__EXCHANGE_A_NYSE_MKT = 3;
+  MarketCategory_NYSE_AMEX = 4;
+  MarketCategory_NYSE_ARCA = 5;
+  MarketCategory_BATS_Z_EXCHANGE = 6;
+  MarketCategory_INVESTORS_EXCHANGE_LLC = 7;
+}
+
+enum MessageType {
+  MessageType_SYSTEM_EVENT_MESSAGE = 0;
+  MessageType_TRADE_REPORT_FOR_NON_NEXT_SHARES = 1;
+  MessageType_TRADE_REPORT_FOR_NEXTSHARES = 2;
+  MessageType_TRADE_CANCEL_ERROR = 3;
+  MessageType_TRADE_CANCEL_ERROR_NON = 4;
+  MessageType_TRADING_ACTION = 5;
+  MessageType_STOCK_DIRECTORY_MESSAGE = 6;
+  MessageType_SHORT_SALE_RESTRICTION_INDICATOR = 7;
+  MessageType_ADJUSTED_CLOSING_PRICE = 8;
+  MessageType_END_OF_DAY_TRADE_SUMMARY = 9;
+  MessageType_END_OF_DAY_TRADE_SUMMARY_NEXTSHARES = 10;
+  MessageType_IPO_MESSAGE = 11;
+  MessageType_IPO_QUOTING_PERIOD_UPDATE = 12;
+  MessageType_MARKET_WIDE_CIRCUIT_BREAKER_DECLINE_LEVEL = 13;
+  MessageType_MARKET_WIDE_CIRCUIT_BREAKER_STATUS = 14;
+  MessageType_OPERATIONAL_HALT = 15;
+  MessageType_TRADE_CORRECTION = 16;
+  MessageType_TRADE_CORRECTION_NON = 17;
+}
+
+enum NetChange {
+  NetChange_FIRST_TRADE_PRICE = 0;
+  NetChange_UNDERWRITER_PRICE = 1;
+}
+
+enum OperationalHaltAction {
+  OperationalHaltAction_OPERATIONALLY_HALTED_ON_THE_IDENTIFIED_MARKET = 0;
+  OperationalHaltAction_OPERATIONAL_HALT_HAS_BEEN_LIFTED_AND_TRADING_RESUMED = 1;
+}
+
+enum OriginatingMarketCenterIdentifier {
+  OriginatingMarketCenterIdentifier_THE_NASDAQ_STOCK_MARKET = 0;
+  OriginatingMarketCenterIdentifier_FINRA_TRADE_REPORTING_FACILITY_TRF_CARTARET = 1;
+  OriginatingMarketCenterIdentifier_FINRA_TRADE_REPORTING_FACILITY_TRF_CHICAGO = 2;
+  OriginatingMarketCenterIdentifier_NASDAQ_BX = 3;
+  OriginatingMarketCenterIdentifier_NASDAQ_PSX = 4;
+}
+
+enum QBBOMessageType {
+  QBBOMessageType_STOCK_DIRECTORY_MESSAGE = 0;
+  QBBOMessageType_TRADING_ACTION = 1;
+  QBBOMessageType_REG_SHO_SHORT_SALE_PRICE_TEST_RESTRICTED_INDICATOR = 2;
+  QBBOMessageType_MARKET_WIDE_CIRCUIT_BREAKER_DECLINE_LEVEL = 3;
+  QBBOMessageType_MARKET_WIDE_CIRCUIT_BREAKER_STATUS_MESSAGE = 4;
+  QBBOMessageType_OPERATIONAL_HALT = 5;
+  QBBOMessageType_QUOTATION_MESSAGE = 6;
+  QBBOMessageType_NEXTSHARES_QUOTATION_MESSAGE = 7;
+  QBBOMessageType_IPO_RELEASE_MESSAGE = 8;
+  QBBOMessageType_SYSTEM_EVENT = 9;
+}
+
+enum QuotationReleaseQualifier {
+  QuotationReleaseQualifier_ANTICIPATED_QUOTATION_RELEASE = 0;
+  QuotationReleaseQualifier_IPO_RELEASE_CANCELED_POSTPONED = 1;
+}
+
+enum RegSHOAction {
+  RegSHOAction_NO_PRICE_TEST_IN_PLACE = 0;
+  RegSHOAction_INTRA_DAY_PRICE = 1;
+  RegSHOAction_RESTRICTION_REMAINS_IN_EFFECT = 2;
+}
+
+enum SecurityClass {
+  SecurityClass_Nasdaq = 0;
+  SecurityClass_NYSE = 1;
+  SecurityClass_NYSE_MKT = 2;
+  SecurityClass_NYSE_ARCA = 3;
+  SecurityClass_BATS = 4;
+  SecurityClass_Investors_Exchange_LLC = 5;
+}
+
+message AdjustedClosingPrice {
+  optional string issueSymbol = 1;
+  optional SecurityClass securityClass = 2;
+  optional double adjustedClosingPrice = 3;
+}
+
+message DayTradeSummary {
+  optional string issueSymbol = 1;
+  optional MarketCategory marketCategory = 2;
+  optional double nasdaqHighPrice = 3;
+  optional double nasdaqLowPrice = 4;
+  optional double nasdaqClosingPrice = 5;
+  optional int64 consolidatedVolume = 6;
+}
+
+message DayTradeSummaryNextShares {
+  optional string issueSymbol = 1;
+  optional MarketCategory marketCategory = 2;
+  optional double nasdaqHighPrice = 3;
+  optional double NAVOffsetAmountHigh = 4;
+  optional double nasdaqLowPrice = 5;
+  optional double NAVOffsetAmountLow = 6;
+  optional double nasdaqClosingPrice = 7;
+  optional double NAVOffsetAmountClose = 8;
+  optional int64 consolidatedVolume = 9;
+}
+
+message IPOInformation {
+  optional string issueSymbol = 1;
+  optional SecurityClass securityClass = 2;
+  optional NetChange referenceForNetChange = 3;
+  optional double referencePrice = 4;
+}
+
+message IPOQuotingPeriodUpdate {
+  optional string stock = 1;
+  optional int64 iPOQuotationReleaseTime = 2;
+  optional IPOQuotationReleaseQualifier quotationReleaseQualifier = 3;
+  optional double iPOPrice = 4;
+}
+
+message MWCBStatusMessage {
+  optional BreachedLevel breachedLevel = 1;
+}
+
+message MarketWideCircuitBreaker {
+  optional double Level1 = 1;
+  optional double Level2 = 2;
+  optional double Level3 = 3;
+}
+
+message MessageHeader {
+  optional int32 trackingNumber = 1;
+  optional int64 timestamp = 2;
+  optional MessageType messageType = 3;
+}
+
+message OperationalHalt {
+  optional string stock = 1;
+  optional MarketCode marketCode = 2;
+  optional OperationalHaltAction operationalHaltAction = 3;
+}
+
+message SaleConditionModifier {
+  optional LevelOne level1 = 1;
+  optional LevelTwo level2 = 2;
+  optional LevelThree level3 = 3;
+  optional LevelFour level4 = 4;
+}
+
+message ShortSaleRestrictionIndicatorMessage {
+  optional string issueSymbol = 1;
+  optional RegSHOAction regSHOAction = 2;
+}
+
+message StockDirectory {
+  optional string stock = 1;
+  optional MarketCategory marketCategory = 2;
+  optional FinancialStatusIndicator financialStatusIndicator = 3;
+  optional int64 roundLotsize = 4;
+  optional IndicatesIf roundLotOnly = 5;
+  optional string issueClassification = 6;
+  optional string issueSubType = 7;
+  optional Authenticity authenticity = 8;
+  optional IndicatesIf shortSaleThresholdIndicator = 9;
+  optional IndicatesIf IPOFlag = 10;
+  optional LULDRule lULDReferencePriceTier = 11;
+  optional IndicatesIf ETPlag = 12;
+  optional int64 ETPLeverageFactor = 13;
+  optional IndicatesIf inverseIndicator = 14;
+  optional string bloombergID = 15;
+}
+
+message StockTradingAction {
+  optional string reserved = 1;
+  optional string issueSymbol = 2;
+  optional SecurityClass securityClass = 3;
+  optional CurrentTradingState currentTradingState = 4;
+  optional string reason = 5;
+}
+
+message SystemEventMessage {
+  optional EventCode eventCode = 1;
+}
+
+message TradeCancelForNextsharesTrades {
+  optional OriginatingMarketCenterIdentifier marketCenterIdentifier = 1;
+  optional string issueSymbol = 2;
+  optional SecurityClass securityClass = 3;
+  optional string originalTradeControlNumber = 4;
+  optional double originalProxyPrice = 5;
+  optional double originalNAVOffsetAmount = 6;
+  optional int64 originalTradeSize = 7;
+  optional string originalSaleConditionModifier = 8;
+  optional int64 consolidatedVolume = 9;
+}
+
+message TradeCancelForNonNextSharesTrades {
+  optional OriginatingMarketCenterIdentifier marketCenterIdentifier = 1;
+  optional string issueSymbol = 2;
+  optional SecurityClass securityClass = 3;
+  optional string originalControlNumber = 4;
+  optional double originalTradePrice = 5;
+  optional int64 originalTradeSize = 6;
+  optional SaleConditionModifier originalSaleConditionModifier = 7;
+  optional int64 consolidatedVolume = 8;
+}
+
+message TradeCorrectionForNextsharesTrades {
+  optional OriginatingMarketCenterIdentifier marketCenterIdentifier = 1;
+  optional string issueSymbol = 2;
+  optional SecurityClass securityClass = 3;
+  optional string originalControlNumber = 4;
+  optional double originalProxyPrice = 5;
+  optional double originalNAVOffsetAmount = 6;
+  optional int64 originalTradeSize = 7;
+  optional string originalConditionModifier = 8;
+  optional string correctedTradeControlNumber = 9;
+  optional double correctedTradePrice = 10;
+  optional double correctedNAVOffsetAmount = 11;
+  optional int64 CorrectedTradeSize = 12;
+  optional string CorrectedSaleConditionModifier = 13;
+  optional int64 consolidatedVolume = 14;
+}
+
+message TradeCorrectionForNonNextsharesTrades {
+  optional OriginatingMarketCenterIdentifier marketCenterIdentifier = 1;
+  optional string issueSymbol = 2;
+  optional SecurityClass securityClass = 3;
+  optional string originalControlNumber = 4;
+  optional double originalTradePrice = 5;
+  optional int64 originalTradeSize = 6;
+  optional string originalConditionModifier = 7;
+  optional string correctedTradeControlNumber = 8;
+  optional double correctedTradePrice = 9;
+  optional int64 CorrectedTradeSize = 10;
+  optional string CorrectedSaleConditionModifier = 11;
+  optional int64 consolidatedVolume = 12;
+}
+
+message TradeReportForNextshares {
+  optional OriginatingMarketCenterIdentifier originatingMarketCenterIdentifier = 1;
+  optional string nextsharesSymbol = 2;
+  optional SecurityClass securityClass = 3;
+  optional string tradeControlNumber = 4;
+  optional double proxyPrice = 5;
+  optional int64 tradeSize = 6;
+  optional double NAVOffsetAmount = 7;
+  optional SaleConditionModifier saleConditionModifier = 8;
+  optional int32 consolidatedVolume = 9;
+}
+
+message TradeReportForNonNextshares {
+  optional OriginatingMarketCenterIdentifier originatingMarketCenterIdentifier = 1;
+  optional string issueSymbol = 2;
+  optional SecurityClass securityClass = 3;
+  optional string tradeControlNumber = 4;
+  optional double tradePrice = 5;
+  optional int64 tradeSize = 6;
+  optional SaleConditionModifier saleConditionModifier = 7;
+  optional int64 consolidatedVolume = 8;
+}
+
+message QBBOMWCBBreachMessage {
+  optional string breachedLevel = 1;
+}
+
+message QBBOMWCBDeclineLevelMessage {
+  optional double Level1 = 1;
+  optional double Level2 = 2;
+  optional double Level3 = 3;
+}
+
+message QBBOMessageHeader {
+  optional QBBOMessageType messageType = 1;
+  optional int32 trackingNumber = 2;
+  optional int64 timestamp = 3;
+}
+
+message QBBONextSharesQuotationMessage {
+  optional string nextsharesSymbol = 1;
+  optional SecurityClass securityClass = 2;
+  optional double nasdaqBestBid = 3;
+  optional int64 nasdaqBestBidSize = 4;
+  optional double nasdaqBestBidDiscountAmount = 5;
+  optional double nasdaqBestOfferProxyPrice = 6;
+  optional int64 nasdaqBestOfferSize = 7;
+  optional double nasdaqBestOfferDiscountAmount = 8;
+}
+
+message QBBOOperationalHalt {
+  optional string stock = 1;
+  optional MarketCode marketCode = 2;
+  optional HaltAction operationalHaltAction = 3;
+}
+
+message QBBOQuotationMessage {
+  optional string stock = 1;
+  optional SecurityClass securityClass = 2;
+  optional double nasdaqBestBidPrice = 3;
+  optional int64 nasdaqBestBidSize = 4;
+  optional double nasdaqBestOfferPrice = 5;
+  optional int64 nasdaqBestOfferSize = 6;
+}
+
+message QBBORegShoRestriction {
+  optional string stock = 1;
+  optional RegSHOAction regSHOAction = 2;
+}
+
+message QBBOStockDirectory {
+  optional string stock = 1;
+  optional MarketCategory marketCategory = 2;
+  optional FinancialStatusIndicator financialStatusIndicator = 3;
+  optional int64 roundLotsize = 4;
+  optional IndicatesIf roundLotOnly = 5;
+  optional string issueClassification = 6;
+  optional string issueSubType = 7;
+  optional Authenticity authenticity = 8;
+  optional IndicatesIf shortSaleThresholdIndicator = 9;
+  optional IndicatesIf IPOFlag = 10;
+  optional LULDRule lULDReferencePriceTier = 11;
+  optional IndicatesIf ETPlag = 12;
+  optional int64 ETPLeverageFactor = 13;
+  optional IndicatesIf inverseIndicator = 14;
+}
+
+message QBBOStockTradingAction {
+  optional string stock = 1;
+  optional SecurityClass securityClass = 2;
+  optional CurrentTradingState currentTradingState = 3;
+  optional string reason = 4;
+}
+
+message QBBOSystemEventMessage {
+  optional EventCode eventCode = 1;
+}
+
+enum BQMoreFlag {
+  BQMoreFlag_MORE_BROKER_NUMBERS_EXIST_IN_THE_QUEUE = 0;
+  BQMoreFlag_NO_MORE_EXIST = 1;
+}
+
+enum BrokerSide {
+  BrokerSide_BUY = 0;
+  BrokerSide_SELL = 1;
+}
+
+enum CallPutFlag {
+  CallPutFlag_C = 0;
+  CallPutFlag_P = 1;
+  CallPutFlag_O = 2;
+}
+
+enum CancelFlag {
+  CancelFlag_Cancelled = 0;
+  CancelFlag_NotCancelled = 1;
+}
+
+enum CurrencyType {
+  CurrencyType_BLANK = 0;
+  CurrencyType_HKD = 1;
+  CurrencyType_AUD = 2;
+  CurrencyType_ATS = 3;
+  CurrencyType_BDT = 4;
+  CurrencyType_BHD = 5;
+  CurrencyType_BEC = 6;
+  CurrencyType_BEL = 7;
+  CurrencyType_BND = 8;
+  CurrencyType_BUK = 9;
+  CurrencyType_CAD = 10;
+  CurrencyType_LKR = 11;
+  CurrencyType_CNY = 12;
+  CurrencyType_CYP = 13;
+  CurrencyType_DKK = 14;
+  CurrencyType_DEM = 15;
+  CurrencyType_NLG = 16;
+  CurrencyType_FJD = 17;
+  CurrencyType_FIM = 18;
+  CurrencyType_FRF = 19;
+  CurrencyType_INR = 20;
+  CurrencyType_IDR = 21;
+  CurrencyType_ITL = 22;
+  CurrencyType_JPY = 23;
+  CurrencyType_KWD = 24;
+  CurrencyType_KES = 25;
+  CurrencyType_LBP = 26;
+  CurrencyType_MUR = 27;
+  CurrencyType_MYR = 28;
+  CurrencyType_NZD = 29;
+  CurrencyType_NGN = 30;
+  CurrencyType_NOK = 31;
+  CurrencyType_OMR = 32;
+  CurrencyType_PKR = 33;
+  CurrencyType_PHP = 34;
+  CurrencyType_PTE = 35;
+  CurrencyType_QAR = 36;
+  CurrencyType_SAR = 37;
+  CurrencyType_SCR = 38;
+  CurrencyType_SGD = 39;
+  CurrencyType_SLL = 40;
+  CurrencyType_ZAR = 41;
+  CurrencyType_KRW = 42;
+  CurrencyType_ESP = 43;
+  CurrencyType_GBP = 44;
+  CurrencyType_SEK = 45;
+  CurrencyType_CHF = 46;
+  CurrencyType_THB = 47;
+  CurrencyType_AED = 48;
+  CurrencyType_USD = 49;
+  CurrencyType_IEP = 50;
+  CurrencyType_SDR = 51;
+  CurrencyType_MOP = 52;
+  CurrencyType_BRC = 53;
+  CurrencyType_ECU = 54;
+  CurrencyType_EUR = 55;
+  CurrencyType_MXN = 56;
+  CurrencyType_CNH = 57;
+}
+
+enum IndexSource {
+  IndexSource_CSI_AND_CES = 0;
+  IndexSource_HSI = 1;
+  IndexSource_S_P = 2;
+  IndexSource_TR = 3;
+}
+
+enum IndexStatus {
+  IndexStatus_CLOSING_VALUE_I_INDICATIVE = 0;
+  IndexStatus_OPENING_INDEX = 1;
+  IndexStatus_LAST_CLOSE_VALUE = 2;
+  IndexStatus_PRELIMINARY_CLOSE = 3;
+  IndexStatus_STOP_LOSS_INDEX = 4;
+  IndexStatus_REALTIME_INDEX_VALUE = 5;
+  IndexStatus_BLANK = 6;
+}
+
+enum IndicatesType {
+  IndicatesType_BROKERNUMBER = 0;
+  IndicatesType_NUMBER_OF_SPREAD = 1;
+}
+
+enum IndicatesWhether {
+  IndicatesWhether_Y = 0;
+  IndicatesWhether_N = 1;
+}
+
+enum InstrumentType {
+  InstrumentType_BOND = 0;
+  InstrumentType_EQTY = 1;
+  InstrumentType_TRST = 2;
+  InstrumentType_WRNT = 3;
+}
+
+enum InvestorType {
+  InvestorType_Retail_Investor = 0;
+  InvestorType_Professional_Investor = 1;
+}
+
+enum LastFragment {
+  LastFragment_Complete = 0;
+  LastFragment_NotComplete = 1;
+}
+enum CnMarketCode{
+    SSE = 0;
+    SZSE = 1;
+}
+
+enum MarketCode {
+  MarketCode_MAIN = 0;
+  MarketCode_GEM = 1;
+  MarketCode_NASD = 2;
+  MarketCode_ETS = 3;
+  MarketCode_NASDAQ = 4;
+  MarketCode_BX = 5;
+  MarketCode_PSX = 6;
+}
+
+enum MsgType {
+  MsgType_Blank = 0;
+  MsgType_SequenceReset = 1;
+  MsgType_Logon = 2;
+  MsgType_LogonResponse = 3;
+  MsgType_DisasterRecoverySignal = 4;
+  MsgType_RetransmissionRequest = 5;
+  MsgType_RetransmissionResponse = 6;
+  MsgType_RefreshComplete = 7;
+  MsgType_MarketDefinition = 8;
+  MsgType_SecurityDefinition = 9;
+  MsgType_LiquidityProvider = 10;
+  MsgType_CurrencyRate = 11;
+  MsgType_TradingSessionStatus = 12;
+  MsgType_SecurityStatus = 13;
+  MsgType_AddOrder = 14;
+  MsgType_ModifyOrder = 15;
+  MsgType_DeleteOrder = 16;
+  MsgType_AddOddLotOder = 17;
+  MsgType_DeleteOddLotOrder = 18;
+  MsgType_AggregateOrderBookUpdate = 19;
+  MsgType_BrokerQueue = 20;
+  MsgType_OrderImbalance = 21;
+  MsgType_Trade = 22;
+  MsgType_TradeCancel = 23;
+  MsgType_TradeTicker = 24;
+  MsgType_ClosingPrice = 25;
+  MsgType_NominalPrice = 26;
+  MsgType_IndicativeEquilibriumPrice = 27;
+  MsgType_ReferencePrice = 28;
+  MsgType_VCMTrigger = 29;
+  MsgType_Statistics = 30;
+  MsgType_MarketTurnover = 31;
+  MsgType_Yield = 32;
+  MsgType_News = 33;
+  MsgType_IndexDefinition = 34;
+  MsgType_IndexData = 35;
+  MsgType_StockConnectDailyQuotaBalance = 36;
+  MsgType_StockConnectMarketTurnover = 37;
+}
+
+enum NewsType {
+  NewsType_EXCHANGE_NEWS = 0;
+  NewsType_CHINESE_EXCHANGE_NEWS = 1;
+}
+
+enum OrderImbalanceDirection {
+  OrderImbalanceDirection_Buy = 0;
+  OrderImbalanceDirection_BUY_SURPLUS = 1;
+  OrderImbalanceDirection_SELL_SURPLUS = 2;
+  OrderImbalanceDirection_BLANK = 3;
+}
+
+enum ProductType {
+  ProductType_EQUITY_ORDINARY_SHARES = 0;
+  ProductType_EQUITY_PREFERENCE_SHARES = 1;
+  ProductType_EQUITY_RIGHTS = 2;
+  ProductType_EQUITY_DEPOSITORY_RECEIPT_ORDINARY_SHARES = 3;
+  ProductType_EQUITY_DEPOSITORY_RECEIPT_PREFERENCE_SHARES = 4;
+  ProductType_EQUITY_SPAC_SHARES_WARRANT = 5;
+  ProductType_WARRANT_DERIVATIVE_WARRANT = 6;
+  ProductType_WARRANT_CALLABLE_BULL_BEAR_CONTRACT = 7;
+  ProductType_WARRANT_EQUITY_WARRANT = 8;
+  ProductType_WARRANT_EQUITY_LINKED_INSTRUMENT = 9;
+  ProductType_WARRANT_INLINE_WARRANT = 10;
+  ProductType_WARRANT_SPAC_WARRANTS_BOND = 11;
+  ProductType_BOND_DEBT_SECURITY_TRUST = 12;
+  ProductType_TRUST_REAL_ESTATE_INVESTMENT_TRUST = 13;
+  ProductType_TRUST_OTHER_UNIT_TRUSTS = 14;
+  ProductType_TRUST_LEVERAGED_AND_INVERSE_PRODUCT = 15;
+  ProductType_TRUST_EQUITY_ETF = 16;
+  ProductType_TRUST_FIXED_INCOME_AND_MONEY_MARKET_ETF = 17;
+  ProductType_TRUST_COMMODITIES_ETF = 18;
+  ProductType_OTHERS_NONE_OF_THE_ABOVE = 19;
+}
+
+enum Side {
+  Side_BID = 0;
+  Side_OFFER = 1;
+}
+
+enum SpreadTableCode {
+  SpreadTableCode_Part_A = 0;
+  SpreadTableCode_Part_B = 1;
+  SpreadTableCode_FOR_INLINE_WARRANT = 2;
+  SpreadTableCode_PART_D = 3;
+}
+
+enum Style {
+  Style_American_Style = 0;
+  Style_European_Style = 1;
+}
+
+enum TradingSesControlType {
+  TradingSesControlType_AUTOMATIC = 0;
+  TradingSesControlType_MANUAL = 1;
+}
+
+enum TradingSesStatus {
+  TradingSesStatus_UNKNOWN = 0;
+  TradingSesStatus_HALTED = 1;
+  TradingSesStatus_PRE_OPEN = 2;
+  TradingSesStatus_OPEN = 3;
+  TradingSesStatus_PRE_CLOSE = 4;
+  TradingSesStatus_CLOSED = 5;
+  TradingSesStatus_DAY_CLOSED = 6;
+}
+
+enum TradingSessionSubID {
+  TradingSessionSubID_NOT_YET_OPEN = 0;
+  TradingSessionSubID_ORDER_INPUT = 1;
+  TradingSessionSubID_NO_CANCELLATION = 2;
+  TradingSessionSubID_RANDOM_MATCHING = 3;
+  TradingSessionSubID_ORDER_MATCHING = 4;
+  TradingSessionSubID_BLOCKING = 5;
+  TradingSessionSubID_CONTINUOUS_TRADING = 6;
+  TradingSessionSubID_CAS_REFERENCE_PRICE_FIXING = 7;
+  TradingSessionSubID_CAS_ORDER_INPUT = 8;
+  TradingSessionSubID_CAS_NO_CANCELLATION = 9;
+  TradingSessionSubID_CAS_RANDOM_CLOSE = 10;
+  TradingSessionSubID_CAS_ORDER_MATCHING = 11;
+  TradingSessionSubID_EXCHANGE_INTERVENTION = 12;
+  TradingSessionSubID_CLOSE = 13;
+  TradingSessionSubID_ORDER_CANCEL = 14;
+  TradingSessionSubID_DAY_CLOSE = 15;
+}
+
+enum TrdType {
+  TrdType_AUTOMATCH_NORMAL = 0;
+  TrdType_LATE_TRADE = 1;
+  TrdType_NON_DIRECT_OFF__EXCHANGE_TRADE = 2;
+  TrdType_AUTOMATCH_INTERNALIZED = 3;
+  TrdType_DIRECT_OFF_EXCHANGE_TRADE = 4;
+  TrdType_ODD_LOT_TRADE = 5;
+  TrdType_AUCTION_TRADE = 6;
+  TrdType_OVERSEAS_TRADE = 7;
+}
+
+enum UpdateAction {
+  UpdateAction_NEW = 0;
+  UpdateAction_CHANGE = 1;
+  UpdateAction_DELETE = 2;
+  UpdateAction_ORDERBOOK_CLEAR = 3;
+}
+
+enum WarrantType {
+  WarrantType_N = 0;
+  WarrantType_X = 1;
+  WarrantType_O = 2;
+}
+
+message AddOddLotOrder {
+  optional int64 securityCode = 1;
+  optional int64 orderId = 2;
+  optional double price = 3;
+  optional int64 quantity = 4;
+  optional int32 brokerID = 5;
+  optional Side side = 6;
+}
+
+message AggregateOrderBookUpdate {
+  optional int64 securityCode = 1;
+  repeated NoEntry noEntries = 2;
+}
+
+message BQMoreItem {
+  optional int32 item = 1;
+  optional IndicatesType type = 2;
+}
+
+message BrokerQueue {
+  optional int64 securityCode = 1;
+  optional int32 itemCount = 2;
+  optional BrokerSide side = 3;
+  optional BQMoreFlag bQMoreFlag = 4;
+  repeated BQMoreItem items = 5;
+}
+
+message ClosingPrice {
+  optional int64 securityCode = 1;
+  optional double closingPrice = 2;
+  optional int64 numberOfTrades = 3;
+}
+
+message CurrencyRate {
+  optional CurrencyType currencyCode = 1;
+  optional int32 currencyFactor = 2;
+  optional double currencyRate = 3;
+}
+
+message DeleteOddLotOrder {
+  optional int64 securityCode = 1;
+  optional int64 orderId = 2;
+  optional int32 brokerID = 3;
+  optional Side side = 4;
+}
+
+message IndexData {
+  optional string indexCode = 1;
+  optional IndexStatus indexStatus = 2;
+  optional int64 indexTime = 3;
+  optional double indexValue = 4;
+  optional double netChgPrevDay = 5;
+  optional double highValue = 6;
+  optional double lowValue = 7;
+  optional double eASValue = 8;
+  optional double indexTurnover = 9;
+  optional double openingValue = 10;
+  optional double closingValue = 11;
+  optional double previousSesClose = 12;
+  optional int64 indexVolume = 13;
+  optional double netChgPrevDayPct = 14;
+  optional string exception = 15;
+}
+
+message IndexDefinition {
+  optional string indexCode = 1;
+  optional IndexSource indexSource = 2;
+  optional CurrencyType currencyCode = 3;
+}
+
+message IndicativeEquilibriumPrice {
+  optional int64 securityCode = 1;
+  optional double price = 2;
+  optional int64 aggregateQuantity = 3;
+}
+
+message LiquidityProvider {
+  optional int64 securityCode = 1;
+  repeated NoLiquidityProvider noLiquidityProviders = 2;
+}
+
+message MarketDefinition {
+  optional MarketCode marketCode = 1;
+  optional string marketName = 2;
+  optional CurrencyType currencyCode = 3;
+  optional int64 numberOfSecurities = 4;
+}
+
+message MarketTurnover {
+  optional MarketCode marketCode = 1;
+  optional CurrencyType currencyCode = 2;
+  optional double turnover = 3;
+}
+
+
+message News {
+  optional NewsType newsType = 1;
+  optional string newsID = 2;
+  optional string headline = 3;
+  optional CancelFlag cancelFlag = 4;
+  optional LastFragment lastFragment = 5;
+  optional int64 releaseTime = 6;
+  repeated NoMarketCode noMarketCodes = 7;
+  repeated NoSecurityCode noSecurityCodes = 8;
+  repeated NoNewsLine noNewsLines = 9;
+}
+
+message NoEntry {
+  optional int64 aggregateQuantity = 1;
+  optional double price = 2;
+  optional int64 numberOfOrders = 3;
+  optional Side side = 4;
+  optional int32 priceLevel = 5;
+  optional UpdateAction updateAction = 6;
+}
+
+message NoLiquidityProvider {
+  optional int32 lPBrokerNumber = 1;
+}
+
+message NoMarketCode {
+  optional MarketCode marketCode = 1;
+}
+
+message NoNewsLine {
+  optional string newsLine = 1;
+}
+
+message NoSecurityCode {
+  optional int64 securityCode = 1;
+}
+
+message NoUnderlyingSecurity {
+  optional int64 underlyingSecurityCode = 1;
+}
+
+message NominalPrice {
+  optional int64 securityCode = 1;
+  optional double nominalPrice = 2;
+}
+
+message OrderImbalance {
+  optional int64 securityCode = 1;
+  optional OrderImbalanceDirection orderImbalanceDirection = 2;
+  optional int64 orderImbalanceQuantity = 3;
+}
+
+message PacketHeader {
+  optional int32 pktSize = 1;
+  optional int32 msgCount = 2;
+  optional string filler = 3;
+  optional int64 seqNum = 4;
+  optional int64 sendTime = 5;
+}
+
+
+message LongAdjustedClosingPrice {
+  optional string issueSymbol = 1;
+  optional SecurityClass securityClass = 2;
+  optional double adjustedClosingPrice = 3;
+}
+
+message LongDayTradeSummary {
+  optional string issueSymbol = 1;
+  optional MarketCategory marketCategory = 2;
+  optional double nasdaqHighPrice = 3;
+  optional double nasdaqLowPrice = 4;
+  optional double nasdaqClosingPrice = 5;
+  optional int64 consolidatedVolume = 6;
+  optional double consolidatedOpenPrice = 7;
+}
+
+message LongTradeCancelForNonNextSharesTrades {
+  optional OriginatingMarketCenterIdentifier marketCenterIdentifier = 1;
+  optional string issueSymbol = 2;
+  optional SecurityClass securityClass = 3;
+  optional string originalControlNumber = 4;
+  optional double originalTradePrice = 5;
+  optional int64 originalTradeSize = 6;
+  optional SaleConditionModifier originalSaleConditionModifier = 7;
+  optional int64 consolidatedVolume = 8;
+}
+
+message LongTradeCorrectionForNonNextsharesTrades {
+  optional OriginatingMarketCenterIdentifier marketCenterIdentifier = 1;
+  optional string issueSymbol = 2;
+  optional SecurityClass securityClass = 3;
+  optional string originalControlNumber = 4;
+  optional double originalTradePrice = 5;
+  optional int64 originalTradeSize = 6;
+  optional string originalConditionModifier = 7;
+  optional string correctedTradeControlNumber = 8;
+  optional double correctedTradePrice = 9;
+  optional int64 CorrectedTradeSize = 10;
+  optional string CorrectedSaleConditionModifier = 11;
+  optional int64 consolidatedVolume = 12;
+}
+
+message LongTradeReportForNonNextshares {
+  optional int64 consolidatedVolume = 1;
+}
+
+
+message ReferencePrice {
+  optional int64 securityCode = 1;
+  optional double referencePrice = 2;
+  optional double lowerPrice = 3;
+  optional double upperPrice = 4;
+}
+
+message QBBOIPOQuotingPeriodUpdate {
+  optional string stock = 1;
+  optional int64 iPOQuotationReleaseTime = 2;
+  optional IPOQuotationReleaseQualifier quotationReleaseQualifier = 3;
+  optional double iPOPrice = 4;
+}
+
+message SecurityDefinition {
+  optional int64 securityCode = 1;
+  optional MarketCode marketCode = 2;
+  optional string isinCode = 3;
+  optional InstrumentType instrumentType = 4;
+  optional ProductType productType = 5;
+  optional SpreadTableCode spreadTableCode = 6;
+  optional string securityShortName = 7;
+  optional CurrencyType currencyCode = 8;
+  optional string securityNameGCCS = 9;
+  optional string securityNameGB = 10;
+  optional int64 lotSize = 11;
+  optional double previousClosingPrice = 12;
+  optional string VCMFlag = 13;
+  optional IndicatesWhether shortSellFlag = 14;
+  optional IndicatesWhether casFlag = 15;
+  optional IndicatesWhether CCASSFlag = 16;
+  optional IndicatesWhether dummySecurityFlag = 17;
+  optional IndicatesWhether stampDutyFlag = 18;
+  optional int64 listingDate = 19;
+  optional int64 delistingDate = 20;
+  optional string freeText = 21;
+  optional IndicatesWhether posFlag = 22;
+  optional int32 posUpperLimit = 23;
+  optional int32 posLowerLimit = 24;
+  optional IndicatesWhether EFNFlag = 25;
+  optional double accruedInterest = 26;
+  optional double couponRate = 27;
+  optional int64 faceValue = 28;
+  optional int32 decimalsInFaceValue = 29;
+  optional string faceValueCurrency = 30;
+  optional int64 bondMaturityDate = 31;
+  optional InvestorType investorType = 32;
+  optional double conversionRatio = 33;
+  optional double strikePrice1 = 34;
+  optional double strikePrice2 = 35;
+  optional int64 warrantMaturityDate = 36;
+  optional CallPutFlag callPutFlag = 37;
+  optional Style style = 38;
+  optional string warrantType = 39;
+  optional int32 callPrice = 40;
+  optional int32 DecimalsInCallPrice = 41;
+  optional int32 entitlement = 42;
+  optional int32 decimalsInEntitlement = 43;
+  optional int64 noWarrantsPerEntitlement = 44;
+  repeated NoUnderlyingSecurity noUnderlyingSecurities = 45;
+}
+
+message SecurityStatus {
+  optional int64 securityCode = 1;
+  optional SuspensionIndicator suspensionIndicator = 2;
+}
+
+message Statistics {
+  optional int64 securityCode = 1;
+  optional int64 sharesTraded = 2;
+  optional double vCMReferencePrice = 3;
+  optional double highPrice = 4;
+  optional double lowPrice = 5;
+  optional double lastPrice = 6;
+  optional double vwap = 7;
+  optional int64 shortSellSharesTraded = 8;
+  optional double shortSellTurnover = 9;
+}
+
+message StockConnectDailyQuotaBalance {
+  optional string stockConnectMarket = 1;
+  optional string tradingDirection = 2;
+  optional int64 dailyQuotaBalance = 3;
+  optional int64 dailyQuotaBalanceTime = 4;
+}
+
+message StockConnectMarketTurnover {
+  optional string stockConnectMarket = 1;
+  optional string tradingDirection = 2;
+  optional int64 buyTurnover = 3;
+  optional int64 sellTurnover = 4;
+  optional int64 buySellTurnover = 5;
+}
+
+message Trade {
+  optional int64 securityCode = 1;
+  optional int64 tradeId = 2;
+  optional double price = 3;
+  optional int64 quantity = 4;
+  optional TrdType trdType = 5;
+  optional int64 TradeTime = 6;
+}
+
+message TradeCancel {
+  optional int64 securityCode = 1;
+  optional int64 tradeId = 2;
+}
+
+message TradingSessionStatus {
+  optional MarketCode marketCode = 1;
+  optional TradingSessionSubID tradingSessionSubID = 2;
+  optional TradingSesStatus tradingSesStatus = 3;
+  optional TradingSesControlType TradingSesControlFlag = 4;
+  optional int64 startDateTime = 5;
+  optional int64 endDateTime = 6;
+}
+
+message VCMTrigger {
+  optional int64 securityCode = 1;
+  optional int64 coolingOffStartTime = 2;
+  optional int64 coolingOffEndTime = 3;
+  optional double vCMReferencePrice = 4;
+  optional double vCMLowerPrice = 5;
+  optional double vCMUpperPrice = 6;
+}
+
+message Yield {
+  optional int64 securityCode = 1;
+  optional int32 yield = 2;
+}
+
+message CNMarketDefinition {
+  optional CnMarketCode marketCode = 1;
+  optional string marketName = 2;
+  optional CurrencyType currencyCode = 3;
+  optional int64 numberOfSecurities = 4;
+}
+
+message CNSecurityDefinition {
+  optional int64 securityCode = 1;
+  optional CnMarketCode marketCode = 2;
+  optional string isinCode = 3;
+  optional InstrumentType instrumentType = 4;
+  optional string securityShortName = 5;
+  optional CurrencyType currencyCode = 6;
+  optional string securityNameGB = 7;
+  optional int64 lotSize = 8;
+  optional double previousClosingPrice = 9;
+  optional IndicatesWhether shortSellFlag = 10;
+  optional int64 listingDate = 11;
+}
+
+message CNSecurityStatus {
+  optional int64 securityCode = 1;
+  optional SecurityTradingStatus securityTradingStatus = 2;
+  optional string tradingPhaseCode = 3;
+}
+
+message CNStatistics {
+  optional int64 securityCode = 1;
+  optional int64 sharesTraded = 2;
+  optional double turnover = 3;
+  optional double highPrice = 4;
+  optional double lowPrice = 5;
+  optional double lastPrice = 6;
+  optional double openingPrice = 7;
+}
+
+message CNTopBook {
+  optional int64 securityCode = 1;
+  optional int64 aggregateBidQuantity = 2;
+  optional int64 aggregateAskQuantity = 3;
+  optional double bidPrice = 4;
+  optional double askPrice = 5;
+}
+
+message CertificationMsg {
+  optional ActionType actionType = 1; // 事件类型
+  optional string auth = 2; // 授权
+  optional Resp response = 3; // 响应
+}
+
+message Resp {
+  optional ResponseType type = 1;
+  optional string errorMsg = 2;
+}
+
+message Message {
+  enum DataType{
+    AddOddLotOrderType  = 0 ;
+    AggregateOrderBookUpdateType = 1 ;
+    BrokerQueueType  = 2 ;
+    ClosingPriceType = 3 ;
+    CurrencyRateType = 4 ;
+    DeleteOddLotOrderType  = 5 ;
+    IndexDataType = 6 ;
+    IndexDefinitionType = 7 ;
+    IndicativeEquilibriumPriceType  = 8 ;
+    LiquidityProviderType  = 9 ;
+    MarketDefinitionType   = 10;
+    MarketTurnoverType  = 11;
+    NewsType   = 12;
+    NominalPriceType = 13;
+    OrderImbalanceType  = 14;
+    ReferencePriceType  = 15;
+    SecurityDefinitionType = 16;
+    SecurityStatusType  = 17;
+    StatisticsType   = 18;
+    StockConnectDailyQuotaBalanceType  = 19;
+    StockConnectMarketTurnoverType  = 20;
+    TradeType  = 21;
+    TradeCancelType  = 22;
+    TradingSessionStatusType  = 23;
+    VCMTriggerType   = 24;
+    YieldType  = 25;
+    AdjustedClosingPriceType  = 26;
+    DayTradeSummaryType = 27;
+    DayTradeSummaryNextSharesType   = 28;
+    IPOInformationType  = 29;
+    IPOQuotingPeriodUpdateType   = 30;
+    LongAdjustedClosingPriceType = 31;
+    LongDayTradeSummaryType   = 32;
+    LongTradeCancelForNonNextSharesTradesType   = 33;
+    LongTradeCorrectionForNonNextsharesTradesType  = 34;
+    LongTradeReportForNonNextsharesType   = 35;
+    MWCBStatusMessageType  = 36;
+    MarketWideCircuitBreakerType = 37;
+    OperationalHaltType = 38;
+    SaleConditionModifierType = 39;
+    ShortSaleRestrictionIndicatorMessageType = 40;
+    StockDirectoryType  = 41;
+    StockTradingActionType = 42;
+    SystemEventMessageType = 43;
+    TradeCancelForNextsharesTradesType = 44;
+    TradeCancelForNonNextSharesTradesType = 45;
+    TradeCorrectionForNextsharesTradesType   = 46;
+    TradeCorrectionForNonNextsharesTradesType   = 47;
+    TradeReportForNextsharesType = 48;
+    TradeReportForNonNextsharesType = 49;
+    QBBOMWCBBreachMessageType = 50;
+    QBBOMWCBDeclineLevelMessageType = 51;
+    QBBONextSharesQuotationMessageType = 52;
+    QBBOOperationalHaltType   = 53;
+    QBBOQuotationMessageType  = 54;
+    QBBORegShoRestrictionType = 55;
+    QBBOStockDirectoryType = 56;
+    QBBOStockTradingActionType   = 57;
+    QBBOSystemEventMessageType   = 58;
+    QBBOIPOQuotingPeriodUpdateType  = 59 ;
+    CertificationMsgType   = 60;//授权验证信息
+    CNMarketDefinitionType = 61;
+    CNSecurityDefinitionType = 62;
+    CNSecurityStatusType = 63;
+    CNStatisticsType = 64;
+    CNTopBookType = 65;
+  }
+  optional DataType data_type = 1;
+
+  oneof dataBody {
+    AddOddLotOrder addOddLotOrder  = 2  ;
+    AggregateOrderBookUpdate aggregateOrderBookUpdate  = 3  ;
+    BrokerQueue brokerQueue  = 4  ;
+    ClosingPrice closingPrice  = 5  ;
+    CurrencyRate currencyRate  = 6  ;
+    DeleteOddLotOrder deleteOddLotOrder  = 7  ;
+    IndexData indexData  = 8  ;
+    IndexDefinition indexDefinition   = 9  ;
+    IndicativeEquilibriumPrice indicativeEquilibriumPrice  = 10 ;
+    LiquidityProvider liquidityProvider  = 11 ;
+    MarketDefinition marketDefinition = 12 ;
+    MarketTurnover marketTurnover  = 13 ;
+    News news = 14 ;
+    NominalPrice nominalPrice   = 15 ;
+    OrderImbalance orderImbalance  = 16 ;
+    ReferencePrice referencePrice  = 17 ;
+    SecurityDefinition securityDefinition   = 18 ;
+    SecurityStatus securityStatus  = 19 ;
+    Statistics statistics = 20 ;
+    StockConnectDailyQuotaBalance stockConnectDailyQuotaBalance  = 21 ;
+    StockConnectMarketTurnover stockConnectMarketTurnover  = 22 ;
+    Trade trade  = 23 ;
+    TradeCancel tradeCancel  = 24 ;
+    TradingSessionStatus tradingSessionStatus  = 25 ;
+    VCMTrigger vCMTrigger = 26 ;
+    Yield yield  = 27 ;
+    AdjustedClosingPrice adjustedClosingPrice  = 28 ;
+    DayTradeSummary dayTradeSummary   = 29 ;
+    DayTradeSummaryNextShares dayTradeSummaryNextShares = 30 ;
+    IPOInformation iPOInformation  = 31 ;
+    IPOQuotingPeriodUpdate iPOQuotingPeriodUpdate = 32 ;
+    LongAdjustedClosingPrice longAdjustedClosingPrice   = 33 ;
+    LongDayTradeSummary longDayTradeSummary = 34 ;
+    LongTradeCancelForNonNextSharesTrades longTradeCancelForNonNextSharesTrades = 35 ;
+    LongTradeCorrectionForNonNextsharesTrades longTradeCorrectionForNonNextsharesTrades  = 36 ;
+    LongTradeReportForNonNextshares longTradeReportForNonNextshares = 37 ;
+    MWCBStatusMessage mWCBStatusMessage  = 38 ;
+    MarketWideCircuitBreaker marketWideCircuitBreaker   = 39 ;
+    OperationalHalt operationalHalt   = 40 ;
+    SaleConditionModifier saleConditionModifier   = 41 ;
+    ShortSaleRestrictionIndicatorMessage shortSaleRestrictionIndicatorMessage   = 42 ;
+    StockDirectory stockDirectory  = 43 ;
+    StockTradingAction stockTradingAction   = 44 ;
+    SystemEventMessage systemEventMessage   = 45 ;
+    TradeCancelForNextsharesTrades tradeCancelForNextsharesTrades   = 46 ;
+    TradeCancelForNonNextSharesTrades tradeCancelForNonNextSharesTrades   = 47 ;
+    TradeCorrectionForNextsharesTrades tradeCorrectionForNextsharesTrades = 48 ;
+    TradeCorrectionForNonNextsharesTrades tradeCorrectionForNonNextsharesTrades = 49 ;
+    TradeReportForNextshares tradeReportForNextshares   = 50 ;
+    TradeReportForNonNextshares tradeReportForNonNextshares   = 51 ;
+    QBBOMWCBBreachMessage qBBOMWCBBreachMessage   = 52 ;
+    QBBOMWCBDeclineLevelMessage qBBOMWCBDeclineLevelMessage   = 53 ;
+    QBBONextSharesQuotationMessage qBBONextSharesQuotationMessage   = 54 ;
+    QBBOOperationalHalt qBBOOperationalHalt = 55 ;
+    QBBOQuotationMessage qBBOQuotationMessage  = 56 ;
+    QBBORegShoRestriction qBBORegShoRestriction   = 57 ;
+    QBBOStockDirectory qBBOStockDirectory   = 58 ;
+    QBBOStockTradingAction qBBOStockTradingAction = 59 ;
+    QBBOSystemEventMessage qBBOSystemEventMessage = 60 ;
+    QBBOIPOQuotingPeriodUpdate qBBOIPOQuotingPeriodUpdate  = 61 ;
+    CertificationMsg certificationMsg = 62 ;
+    CNMarketDefinition cNMarketDefinition = 63;
+    CNSecurityDefinition cNSecurityDefinition = 64;
+    CNSecurityStatus cNSecurityStatus = 65;
+    CNStatistics cNStatistics = 66;
+    CNTopBook cNTopBook = 67;
+  }
+  optional int64 timestamp = 68;
+}
